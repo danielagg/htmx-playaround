@@ -14,8 +14,9 @@
     <h1>Hello World!</h1>
 
     <div id="parent-div">
+      <!-- hx-post="https://htmx-playground-eight.vercel.app/api" -->
       <button
-        hx-post="https://htmx-playground-eight.vercel.app/api"
+        hx-get="/api"
         hx-trigger="click"
         hx-target="#parent-div"
         hx-swap="innerHTML"
