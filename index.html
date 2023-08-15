@@ -15,19 +15,22 @@
     class="min-h-screen flex justify-center items-center bg-slate-900 text-white"
   >
     <section class="text-center">
-      <h1 class="text-6xl font-bold">Hello World!</h1>
+      <h1 class="text-3xl font-bold">Random Quote Generator</h1>
+      <button
+        hx-get="/api"
+        hx-trigger="click"
+        hx-target="#current-quote"
+        class="mt-6 rounded bg-blue-400 py-2 px-12 text-slate-900 hover:bg-blue-500"
+      >
+        Generate Quote
+      </button>
 
-      <div id="parent-div" class="mt-6">
-        <button
-          hx-get="/api"
-          hx-trigger="click"
-          hx-target="#parent-div"
-          hx-swap="innerHTML"
-          class="rounded bg-blue-400 py-2 px-12 text-slate-900 hover:bg-blue-500"
-        >
-          Click Me!
-        </button>
+      <div class="my-24">
+        <div id="current-quote"></div>
       </div>
+
+      <!-- todo: allow voting on 1-5 how much you enjoyed the quote -->
+      <!-- use Postgres -->
     </section>
   </body>
 </html>
