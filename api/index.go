@@ -41,5 +41,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
         log.Fatal(err)
     }
 
-	fmt.Fprintf(w, "<blockquote class=\"text-4xl italic\">%s<br /><span class=\"text-lg font-normal not-italic\">by %s\n</span></blockquote>", quote.Quote, quote.Author)
+	fmt.Fprintf(w, "<blockquote class=\"text-5xl italic\">%s<br /><span class=\"text-lg opacity-50 font-normal not-italic\">by %s\n</span></blockquote>", quote.Quote, quote.Author)
 }
