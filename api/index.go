@@ -10,6 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+
 type Quote struct {
     ID      int
     Quote   string
@@ -41,5 +42,23 @@ func Handler(w http.ResponseWriter, r *http.Request) {
         log.Fatal(err)
     }
 
-	fmt.Fprintf(w, "<blockquote class=\"text-5xl italic\">%s<br /><span class=\"text-lg opacity-50 font-normal not-italic\">by %s\n</span></blockquote>", quote.Quote, quote.Author)
+	htmlTemplate := `
+<section>
+  <blockquote class="text-5xl italic">
+    %s
+    <br />
+    <span class="text-lg opacity-50 font-normal not-italic">
+      by %s
+    </span>
+  </blockquote>
+  <div>
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>4</button>
+    <button>5</button>
+  </div>
+</section>
+`
+    fmt.Fprintf(w, htmlTemplate, quote.Quote, quote.Author)
 }
