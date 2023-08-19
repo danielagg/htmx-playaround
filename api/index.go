@@ -6,8 +6,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
 )
 
 
@@ -15,6 +16,7 @@ type Quote struct {
     ID      int
     Quote   string
     Author  string
+    Ratings pq.Int64Array
 }
  
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -33,10 +35,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
     }
     defer db.Close()
 
-	query := "SELECT id, quote, author FROM htmx_playaround.Quotes LIMIT 1"
+	query := "SELECT id, quote, author, ratings FROM htmx_playaround.Quotes LIMIT 1"
 
     var quote Quote
-    err = db.QueryRow(query).Scan(&quote.ID, &quote.Quote, &quote.Author)
+    err = db.QueryRow(query).Scan(&quote.ID, &quote.Quote, &quote.Author, &quote.Ratings)
 
     if err != nil {
         log.Fatal(err)
@@ -44,7 +46,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	htmlTemplate := `
 <section>
-  <blockquote class="text-5xl italic">
+  <blockquote class="text-5xl italic border-t border-slate-800 pt-16">
     %s
     <br />
     <span class="text-lg opacity-50 font-normal not-italic">
@@ -52,13 +54,26 @@ func Handler(w http.ResponseWriter, r *http.Request) {
     </span>
   </blockquote>
   <div>
-    <button>1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
+    <h2 class="text-xl border-t border-slate-800 mt-16 pt-16">On a scale from 1 to 5, how cringey was that quote?</h2>
+    <div class="flex justify-center mt-4 items-center space-x-2">
+        <button class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-red-400 hover:bg-red-600">1</button>
+        <button class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-orange-400 hover:bg-orange-600">2</button>
+        <button class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-yellow-400 hover:bg-yellow-600">3</button>
+        <button class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-lime-400 hover:bg-lime-600">4</button>
+        <button class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-green-400 hover:bg-green-600">5</button>
+    </div>
+    <p class="pt-4 opacity-50 text-sm">The current average rating is: %v</p>
   </div>
 </section>
 `
-    fmt.Fprintf(w, htmlTemplate, quote.Quote, quote.Author)
+
+    var sum int64
+    for _, value := range quote.Ratings {
+        sum += value
+    }
+
+    average := float64(sum) / float64(len(quote.Ratings))
+    roundedAverage := strconv.FormatFloat(average, 'f', 2, 64)
+
+    fmt.Fprintf(w, htmlTemplate, quote.Quote, quote.Author, roundedAverage)
 }
