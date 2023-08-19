@@ -20,22 +20,23 @@ type Quote struct {
 }
  
 func Handler(w http.ResponseWriter, r *http.Request) {
-	host := os.Getenv("POSTGRES_HOST")
+    host := os.Getenv("POSTGRES_HOST")
     port := 5432
     user := os.Getenv("POSTGRES_USER")
     password := os.Getenv("POSTGRES_PASSWORD")
     dbname := os.Getenv("POSTGRES_DB")
 
-	connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
-	host, port, user, password, dbname)
+    connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
+    host, port, user, password, dbname)
 
-	db, err := sql.Open("postgres", connStr)
+    db, err := sql.Open("postgres", connStr)
+
     if err != nil {
         log.Fatal(err)
     }
     defer db.Close()
 
-	query := "SELECT id, quote, author, ratings FROM htmx_playaround.Quotes LIMIT 1"
+    query := "SELECT id, quote, author, ratings FROM htmx_playaround.Quotes LIMIT 1"
 
     var quote Quote
     err = db.QueryRow(query).Scan(&quote.ID, &quote.Quote, &quote.Author, &quote.Ratings)
@@ -44,7 +45,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
         log.Fatal(err)
     }
 
-	htmlTemplate := `
+    htmlTemplate := `
 <section>
   <blockquote class="text-5xl italic border-t border-slate-800 pt-16">
     %s
