@@ -11,7 +11,6 @@ import (
 	"github.com/lib/pq"
 )
 
-
 type Quote struct {
     ID      int
     Quote   string
