@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"database/sql"
-	"encoding/json"
+	// "database/sql"
+	// "encoding/json"
 	"fmt"
-	"log"
+	// "log"
 	"net/http"
-	"os"
+	// "os"
 
 	_ "github.com/lib/pq"
 )
@@ -22,35 +22,35 @@ func RateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var rating RateQuote
-	err := json.NewDecoder(r.Body).Decode(&rating)
-	if err != nil {
-		http.Error(w, "Could not parse the JSON payload.", http.StatusBadRequest)
-		return
-	}
+	// var rating RateQuote
+	// err := json.NewDecoder(r.Body).Decode(&rating)
+	// if err != nil {
+	// 	http.Error(w, "Could not parse the JSON payload.", http.StatusBadRequest)
+	// 	return
+	// }
 
-	host := os.Getenv("POSTGRES_HOST")
-    port := 5432
-    user := os.Getenv("POSTGRES_USER")
-    password := os.Getenv("POSTGRES_PASSWORD")
-    dbname := os.Getenv("POSTGRES_DB")
+	// host := os.Getenv("POSTGRES_HOST")
+    // port := 5432
+    // user := os.Getenv("POSTGRES_USER")
+    // password := os.Getenv("POSTGRES_PASSWORD")
+    // dbname := os.Getenv("POSTGRES_DB")
 
-    connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
-    host, port, user, password, dbname)
+    // connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
+    // host, port, user, password, dbname)
 
-    db, err := sql.Open("postgres", connStr)
+    // db, err := sql.Open("postgres", connStr)
 
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer db.Close()
+    // if err != nil {
+    //     log.Fatal(err)
+    // }
+    // defer db.Close()
 
-	query := fmt.Sprintf("UPDATE htmx_playaround.Quotes SET ratings = array_append(ratings, %d) WHERE id = %d", rating.Rating, rating.QuoteId)
+	// query := fmt.Sprintf("UPDATE htmx_playaround.Quotes SET ratings = array_append(ratings, %d) WHERE id = %d", rating.Rating, rating.QuoteId)
 
-	_, err = db.Exec(query)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// _, err = db.Exec(query)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	// todo: main GET API to return quoteId
 	// todo: refetch quote after updating the rating
