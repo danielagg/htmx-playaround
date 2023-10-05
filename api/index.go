@@ -57,11 +57,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
     <h2 class="text-xl border-t border-slate-800 mt-16 pt-16">On a scale from 1 to 5, how cringey was that quote?</h2>
     <div class="flex justify-center mt-4 items-center space-x-2">
       <form id="rating-form" class="flex items-center space-x-2">
-        <button type="submit" hx-post="/api/rate" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-red-400 hover:bg-red-600">1</button>
-        <button type="submit" hx-post="/api/rate" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-orange-400 hover:bg-orange-600">2</button>
-        <button type="submit" hx-post="/api/rate" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-yellow-400 hover:bg-yellow-600">3</button>
-        <button type="submit" hx-post="/api/rate" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-lime-400 hover:bg-lime-600">4</button>
-        <button type="submit" hx-post="/api/rate" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-green-400 hover:bg-green-600">5</button>
+        <button type="submit" hx-post="/api/rate?id=%d&value=1" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-red-400 hover:bg-red-600">1</button>
+        <button type="submit" hx-post="/api/rate?id=%d&value=2" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-orange-400 hover:bg-orange-600">2</button>
+        <button type="submit" hx-post="/api/rate?id=%d&value=3" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-yellow-400 hover:bg-yellow-600">3</button>
+        <button type="submit" hx-post="/api/rate?id=%d&value=4" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-lime-400 hover:bg-lime-600">4</button>
+        <button type="submit" hx-post="/api/rate?id=%d&value=5" hx-target="#quote" class="rounded-full h-10 w-10 flex items-center justify-center text-slate-900 bg-green-400 hover:bg-green-600">5</button>
       </form>
     </div>
     <p class="pt-4 opacity-50 text-sm">The current average rating is: %v</p>
@@ -77,5 +77,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
     average := float64(sum) / float64(len(quote.Ratings))
     roundedAverage := strconv.FormatFloat(average, 'f', 2, 64)
 
-    fmt.Fprintf(w, htmlTemplate, quote.Quote, quote.Author, roundedAverage)
+    // todo: should not need .ID 5 times... :|
+    fmt.Fprintf(w, htmlTemplate, quote.Quote, quote.Author, quote.ID, quote.ID, quote.ID, quote.ID, quote.ID, roundedAverage)
 }
